@@ -1,76 +1,74 @@
 #include "player.hpp"
+#include "particleeffect.hpp"
 #include "game.hpp"
-#include "bomb.hpp"
 
 namespace game
 {
-
-    Player::Player(Game *game, sf::Vector2f position) : Entity(game), rect(sf::Vector2f(32.f, 48.f))
+    Player::Player(Game *game, sf::Vector2f position)
+        : Entity(game), shape(std::make_shared<physics::Shape>("models/ragdoll.toml", 2.f)),
+          moveCD(0.5f), shootCD(1.f)
     {
-        dynobj = std::make_shared<physics::Vertex>(position);
-        dynobj->elasticity = 0.25f;
-        dynobj->airFriction = 0.95f;
-        dynobj->collideFriction = 0.5f;
-        rect.setPosition(position);
-        rect.setFillColor(sf::Color::Green);
-        game->addEntity(this);
-        game->simulation.addVertex(dynobj);
+        shape->moveTo(position);
+
+        for (auto l : shape->links)
+        {
+            l->onLinkBroken = std::bind(&Player::onLinkBroken, this, std::placeholders::_1);
+        }
+    }
+
+    void Player::onLinkBroken(std::shared_ptr<physics::RigidLink> link)
+    {
+        // spawn link broken partiles
+        for (int _ = 0; _ < 16; _++)
+        {
+            auto p = new BreakParticle(game, link->v1.position, link->v2.position);
+            game->addEntity(p);
+            game->addDynamicObject(p->dynObject);
+        }
     }
 
     void Player::update(float tdelta)
     {
-        auto size = rect.getSize();
-
-        // Movement
-        if (game->input.actionDown(Input::Action::Up))
-        {
-            dynobj->push(sf::Vector2f(0.f, -2.5f));
-            for (int _ = 0; _ < 2; _++)
-            {
-                auto particle = new BoostParticle(game, dynobj->position);
-                game->addEntity(particle);
-                game->simulation.addDynamicObject(particle->dynObject);
-            }
-        }
-        if (game->input.actionDown(Input::Action::Right))
-        {
-            dynobj->push(sf::Vector2f(1.5f, 0.f));
-        }
-        if (game->input.actionDown(Input::Action::Left))
-        {
-            dynobj->push(sf::Vector2f(-1.5f, 0.f));
-        }
-
-        // Shoot
-        if (game->input.mouseButtonPressed(sf::Mouse::Button::Left))
-        {
-            // Spawn bomb
-            auto direction = sf::Vector2f(game->input.getMouseCurrentPosition()) - dynobj->position;
-            auto velocity = 0.1f * direction;
-            auto position = sf::Vector2f(dynobj->position.x,
-                                         dynobj->position.y - size.y / 2.f);
-            auto bomb = new Bomb(game, position, velocity);
-            game->addEntity(bomb);
-            game->simulation.addTrigger(bomb->trigger);
-
-            // Spawn spark particles
-            for (int _ = 0; _ < 8; _++)
-            {
-                auto particle = new SparkParticle(game, dynobj->position, direction);
-                game->addEntity(particle);
-                game->simulation.addDynamicObject(particle->dynObject);
-            }
-
-            // Gun knockback
-            dynobj->push(-0.15f * velocity);
-        }
-
-        rect.setPosition(sf::Vector2f(dynobj->position.x - size.x / 2.f,
-                                      dynobj->position.y - size.y));
+        if (leftTimer > 0.f)
+            leftTimer -= tdelta;
+        if (rightTimer > 0.f)
+            rightTimer -= tdelta;
+        if (shootTimer > 0.f)
+            shootTimer -= tdelta;
     }
 
     void Player::draw(sf::RenderWindow &window) const
     {
-        window.draw(rect);
+        for (auto l : shape->links)
+        {
+            if (l->isBroken)
+                continue;
+
+            sf::Vertex line[] = {sf::Vertex(l->v1.position),
+                                 sf::Vertex(l->v2.position)};
+            window.draw(line, 2, sf::Lines);
+        }
+    }
+
+    void Player::moveLeftArm()
+    {
+        if (leftTimer <= 0.f)
+        {
+            leftTimer = moveCD;
+            // move arm
+        }
+    }
+
+    void Player::moveRightArm()
+    {
+    }
+
+    void Player::shoot()
+    {
+        if (shootTimer <= 0.f)
+        {
+            shootTimer = shootCD;
+            // shoot
+        }
     }
 }

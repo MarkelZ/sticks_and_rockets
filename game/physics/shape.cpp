@@ -3,7 +3,16 @@
 
 namespace physics
 {
-    Shape::Shape(const char path[])
+
+    Shape::Shape(std::vector<std::shared_ptr<Vertex>> vertices,
+                 std::vector<std::shared_ptr<RigidLink>> links,
+                 float scale)
+        : vertices(vertices), links(links)
+    {
+        scaleBy(scale);
+    }
+
+    Shape::Shape(const char path[], float scale)
     {
         auto shapetoml = toml::parse_file(path);
 
@@ -34,6 +43,9 @@ namespace physics
             links.push_back(link);
             i++;
         }
+
+        // scale shape
+        scaleBy(scale);
     }
 
     void Shape::push(sf::Vector2f velocity)
@@ -56,6 +68,24 @@ namespace physics
         for (auto v : vertices)
         {
             v->moveBy(direction);
+        }
+    }
+
+    void Shape::scaleBy(float scale)
+    {
+        if (vertices.empty())
+            return;
+
+        auto origin = vertices[0]->position;
+        for (auto v : vertices)
+        {
+            auto diff = v->position - origin;
+            v->moveBy(diff * (scale - 1.f));
+        }
+        for (int i = 0; i < links.size(); i++)
+        {
+            links[i]->maxLength *= scale;
+            links[i]->length *= scale;
         }
     }
 }

@@ -7,7 +7,6 @@
 #include "entity.hpp"
 #include "particleeffect.hpp"
 #include "physics/simulation.hpp"
-#include "ragdoll.hpp"
 #include "bomb.hpp"
 #include "player.hpp"
 
@@ -37,7 +36,8 @@ namespace game
         void removeEntities();
 
     public:
-        Player *player;
+        Player *player1;
+        Player *player2;
         std::vector<Entity *> entities;
         std::vector<Entity *> toAdd;
         std::vector<Entity *> toRemove;

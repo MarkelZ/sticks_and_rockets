@@ -19,7 +19,13 @@ namespace game
 
         input.setWindow(window);
 
-        player = new Player(this, sf::Vector2f(100.f, 100.f));
+        player1 = new Player(this, sf::Vector2f(100.f, 100.f));
+        addEntity(player1);
+        simulation.addShape(*player1->shape);
+
+        player2 = new Player(this, sf::Vector2f(600.f, 100.f));
+        addEntity(player2);
+        simulation.addShape(*player2->shape);
     }
 
     void Game::run()
@@ -93,18 +99,6 @@ namespace game
         }
 
         simulation.update(SPT);
-
-        // Game stuff here
-        if (input.actionPressed(Input::Action::A1))
-        {
-            auto r = new Ragdoll(this, sf::Vector2f(0.f, 400.f));
-            float speed = 1.f + 2.f * (rand() / (static_cast<float>(RAND_MAX)));
-            float spin = 5.f + 10.f * (rand() / (static_cast<float>(RAND_MAX)));
-            r->shape->push(speed * sf::Vector2f(5.f, -10.f));
-            r->shape->vertices[0]->prevpos.x -= spin; // give some spin to ragdoll
-            entities.push_back(r);
-            simulation.addShape(*r->shape);
-        }
 
         for (auto e : entities)
         {
