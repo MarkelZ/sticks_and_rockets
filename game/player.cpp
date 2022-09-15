@@ -14,6 +14,11 @@ namespace game
         {
             l->onLinkBroken = std::bind(&Player::onLinkBroken, this, std::placeholders::_1);
         }
+        shape->vertices[0]->isFixed = true;
+        for (int i = 0; i < 5; i++)
+        {
+            shape->links[i]->canBreak = false;
+        }
     }
 
     void Player::onLinkBroken(std::shared_ptr<physics::RigidLink> link)

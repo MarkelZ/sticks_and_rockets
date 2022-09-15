@@ -35,7 +35,7 @@ namespace physics
         void popTrigger(std::shared_ptr<Trigger> trigger);
 
     private:
-        int upd_iters = 2;
+        int upd_iters = 4;
 
         std::vector<std::shared_ptr<DynamicObject>> remDynObjs;
         std::vector<std::shared_ptr<Vertex>> remVertices;

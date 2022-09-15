@@ -19,11 +19,11 @@ namespace game
 
         input.setWindow(window);
 
-        player1 = new Player(this, sf::Vector2f(100.f, 100.f));
+        player1 = new Player(this, sf::Vector2f(200.f, 100.f));
         addEntity(player1);
         simulation.addShape(*player1->shape);
 
-        player2 = new Player(this, sf::Vector2f(600.f, 100.f));
+        player2 = new Player(this, sf::Vector2f(width - 200.f, 100.f));
         addEntity(player2);
         simulation.addShape(*player2->shape);
     }
