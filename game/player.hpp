@@ -27,7 +27,7 @@ namespace game
 
         void update(float tdelta) override;
         void draw(sf::RenderWindow &window) const override;
-        void moveArms();
+        void moveArms(sf::Vector2f move);
         void shootLeftArm();
         void shootRightArm();
 
@@ -39,5 +39,7 @@ namespace game
         float leftTimer;  // Timer for left arm shoot cooldown
         float rightTimer; // Timer for right arm shoot cooldown
         float moveTimer;  // Timer for move cooldown
+
+        void ShootBomb(physics::RigidLink &hand);
     };
 }

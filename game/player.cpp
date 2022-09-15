@@ -81,16 +81,14 @@ namespace game
         }
     }
 
-    void Player::moveArms()
+    void Player::moveArms(sf::Vector2f move)
     {
         if (moveTimer <= 0.f)
         {
             moveTimer = moveCD;
-            auto move = sf::Vector2f(0.f, -30.f);
-            leftArm[1]->v1.push(move);
+
             leftArm[2]->v1.push(move);
             leftArm[2]->v2.push(move);
-            rightArm[1]->v1.push(move);
             rightArm[2]->v1.push(move);
             rightArm[2]->v2.push(move);
         }
@@ -98,9 +96,24 @@ namespace game
 
     void Player::shootLeftArm()
     {
+        ShootBomb(*leftArm[2]);
     }
 
     void Player::shootRightArm()
     {
+        ShootBomb(*rightArm[2]);
+    }
+
+    void Player::ShootBomb(physics::RigidLink &hand)
+    {
+        if (hand.isBroken)
+            return;
+
+        auto direction = hand.v2.position - hand.v1.position;
+        auto power = 40.f;
+        auto velocity = vecm::normalized(direction) * power;
+        auto bomb = new Bomb(game, hand.v2.position, velocity);
+        game->addEntity(bomb);
+        game->simulation.addTrigger(bomb->trigger);
     }
 }
