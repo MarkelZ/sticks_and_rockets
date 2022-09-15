@@ -11,7 +11,17 @@ namespace game
     class Player : public Entity
     {
     public:
-        std::shared_ptr<physics::Shape> shape; // make private
+        // Object that contains all links and vertices
+        std::shared_ptr<physics::Shape> shape;
+
+        // Body parts of ragdoll
+        // They are subsets of shape->links
+        std::vector<std::shared_ptr<physics::RigidLink>> rope;
+        std::vector<std::shared_ptr<physics::RigidLink>> head;
+        std::vector<std::shared_ptr<physics::RigidLink>> leftArm;
+        std::vector<std::shared_ptr<physics::RigidLink>> rightArm;
+        std::vector<std::shared_ptr<physics::RigidLink>> body;
+        std::vector<std::shared_ptr<physics::RigidLink>> legs;
 
         Player(Game *game, sf::Vector2f position);
 
