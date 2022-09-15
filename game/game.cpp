@@ -13,7 +13,7 @@ namespace game
         settings.antialiasingLevel = 8;
 
         window = new sf::RenderWindow(
-            sf::VideoMode(width, height), "Physics Demo",
+            sf::VideoMode(width, height), "Sticks and Rockets",
             sf::Style::Titlebar | sf::Style::Close, settings);
         window->setFramerateLimit(TPS);
 
