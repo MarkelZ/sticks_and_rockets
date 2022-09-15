@@ -37,10 +37,10 @@ namespace game
             l->maxLength *= 1.25f;
 
         for (auto l : leftArm)
-            l->maxLength *= 0.85f;
+            l->maxLength *= 2.f;
 
         for (auto l : rightArm)
-            l->maxLength *= 0.85f;
+            l->maxLength *= 2.f;
 
         for (auto l : legs)
             l->maxLength *= 0.85f;
@@ -64,8 +64,8 @@ namespace game
             leftTimer -= tdelta;
         if (rightTimer > 0.f)
             rightTimer -= tdelta;
-        if (shootTimer > 0.f)
-            shootTimer -= tdelta;
+        if (moveTimer > 0.f)
+            moveTimer -= tdelta;
     }
 
     void Player::draw(sf::RenderWindow &window) const
@@ -81,25 +81,26 @@ namespace game
         }
     }
 
-    void Player::moveLeftArm()
+    void Player::moveArms()
     {
-        if (leftTimer <= 0.f)
+        if (moveTimer <= 0.f)
         {
-            leftTimer = moveCD;
-            // move arm
+            moveTimer = moveCD;
+            auto move = sf::Vector2f(0.f, -30.f);
+            leftArm[1]->v1.push(move);
+            leftArm[2]->v1.push(move);
+            leftArm[2]->v2.push(move);
+            rightArm[1]->v1.push(move);
+            rightArm[2]->v1.push(move);
+            rightArm[2]->v2.push(move);
         }
     }
 
-    void Player::moveRightArm()
+    void Player::shootLeftArm()
     {
     }
 
-    void Player::shoot()
+    void Player::shootRightArm()
     {
-        if (shootTimer <= 0.f)
-        {
-            shootTimer = shootCD;
-            // shoot
-        }
     }
 }

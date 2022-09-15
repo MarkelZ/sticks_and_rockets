@@ -105,6 +105,16 @@ namespace game
             e->update(SPT);
         }
 
+        if (input.actionDown(Input::Action::P1Move))
+        {
+            player1->moveArms();
+        }
+
+        if (input.actionDown(Input::Action::P2Move))
+        {
+            player2->moveArms();
+        }
+
         addEntities();
         removeEntities();
     }

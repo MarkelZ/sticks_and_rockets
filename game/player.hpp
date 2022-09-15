@@ -27,17 +27,17 @@ namespace game
 
         void update(float tdelta) override;
         void draw(sf::RenderWindow &window) const override;
-        void moveLeftArm();
-        void moveRightArm();
-        void shoot();
+        void moveArms();
+        void shootLeftArm();
+        void shootRightArm();
 
     protected:
         void onLinkBroken(std::shared_ptr<physics::RigidLink> link);
 
         float moveCD;     // Amount of cooldown time for moving (seconds)
         float shootCD;    // Amount of cooldown time for shooting (seconds)
-        float leftTimer;  // Timer for left arm move cooldown
-        float rightTimer; // Timer for right arm move cooldown
-        float shootTimer; // Timer for shoot cooldown
+        float leftTimer;  // Timer for left arm shoot cooldown
+        float rightTimer; // Timer for right arm shoot cooldown
+        float moveTimer;  // Timer for move cooldown
     };
 }

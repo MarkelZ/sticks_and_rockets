@@ -4,21 +4,22 @@
 
 namespace game
 {
-    constexpr Input::Action ACTIONS[] = {Input::Left, Input::Right, Input::Up, Input::Down, Input::A1, Input::A2};
+    constexpr Input::Action ACTIONS[] = {Input::Select, Input::Restart,
+                                         Input::P1Left, Input::P1Right, Input::P1Move,
+                                         Input::P2Left, Input::P2Right, Input::P2Move};
     constexpr sf::Mouse::Button MOUSE_BUTTONS[] = {sf::Mouse::Button::Left, sf::Mouse::Button::Right, sf::Mouse::Button::Middle, sf::Mouse::Button::XButton1, sf::Mouse::Button::XButton2};
 
     Input::Input()
     {
         // This should be loaded from a config file
-        actionKeys[Action::Left].push_back(sf::Keyboard::Key::Left);
-        actionKeys[Action::Left].push_back(sf::Keyboard::Key::A);
-        actionKeys[Action::Right].push_back(sf::Keyboard::Key::Right);
-        actionKeys[Action::Right].push_back(sf::Keyboard::Key::D);
-        actionKeys[Action::Up].push_back(sf::Keyboard::Key::Up);
-        actionKeys[Action::Up].push_back(sf::Keyboard::Key::W);
-        actionKeys[Action::Down].push_back(sf::Keyboard::Key::Down);
-        actionKeys[Action::Down].push_back(sf::Keyboard::Key::S);
-        actionKeys[Action::A1].push_back(sf::Keyboard::Key::Space);
+        actionKeys[Action::Select].push_back(sf::Keyboard::Key::Space);
+        actionKeys[Action::Restart].push_back(sf::Keyboard::Key::R);
+        actionKeys[Action::P1Move].push_back(sf::Keyboard::Key::A);
+        actionKeys[Action::P1Left].push_back(sf::Keyboard::Key::S);
+        actionKeys[Action::P1Right].push_back(sf::Keyboard::Key::D);
+        actionKeys[Action::P2Move].push_back(sf::Keyboard::Key::J);
+        actionKeys[Action::P2Left].push_back(sf::Keyboard::Key::K);
+        actionKeys[Action::P2Right].push_back(sf::Keyboard::Key::L);
 
         for (Action action : ACTIONS)
         {

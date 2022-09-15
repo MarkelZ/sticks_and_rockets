@@ -8,12 +8,14 @@ namespace game
     public:
         enum Action
         {
-            Left,
-            Right,
-            Up,
-            Down,
-            A1,
-            A2
+            Select,
+            Restart,
+            P1Left,
+            P1Right,
+            P1Move,
+            P2Left,
+            P2Right,
+            P2Move
         };
         static const int hi{1};
 
