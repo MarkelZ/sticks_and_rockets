@@ -21,6 +21,6 @@ namespace game
         bool isExploded;
         float power;
         sf::CircleShape circle;
-        static constexpr float RADIUS = 16.f;
+        static constexpr float RADIUS = 24.f;
     };
 }

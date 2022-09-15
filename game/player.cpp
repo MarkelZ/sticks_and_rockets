@@ -6,7 +6,7 @@ namespace game
 {
     Player::Player(Game *game, sf::Vector2f position)
         : Entity(game), shape(std::make_shared<physics::Shape>("models/ragdoll.toml", 2.f)),
-          moveCD(0.5f), shootCD(1.f)
+          moveCD(0.25f), shootCD(1.f)
     {
         shape->moveTo(position);
 
@@ -96,12 +96,20 @@ namespace game
 
     void Player::shootLeftArm()
     {
-        ShootBomb(*leftArm[2]);
+        if (leftTimer <= 0.f)
+        {
+            leftTimer = shootCD;
+            ShootBomb(*leftArm[2]);
+        }
     }
 
     void Player::shootRightArm()
     {
-        ShootBomb(*rightArm[2]);
+        if (rightTimer <= 0.f)
+        {
+            rightTimer = shootCD;
+            ShootBomb(*rightArm[2]);
+        }
     }
 
     void Player::ShootBomb(physics::RigidLink &hand)
@@ -109,10 +117,16 @@ namespace game
         if (hand.isBroken)
             return;
 
-        auto direction = hand.v2.position - hand.v1.position;
-        auto power = 40.f;
-        auto velocity = vecm::normalized(direction) * power;
-        auto bomb = new Bomb(game, hand.v2.position, velocity);
+        // velocity
+        auto direction = vecm::normalized(hand.v2.position - hand.v1.position);
+        auto power = 20.f;
+        auto velocity = direction * power;
+
+        // Add some offset to position
+        // so that it does not collide with the hand
+        auto position = hand.v2.position + 25.f * direction;
+
+        auto bomb = new Bomb(game, position, velocity);
         game->addEntity(bomb);
         game->simulation.addTrigger(bomb->trigger);
     }

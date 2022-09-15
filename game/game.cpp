@@ -7,7 +7,7 @@ namespace game
     Game::Game(int width, int height)
         : width(width), height(height),
           debugwriter("content/freemono.ttf", 24, sf::Color::White),
-          input(), simulation(width, height, 0.5f)
+          input(), simulation(width, height, 0.35f)
     {
         sf::ContextSettings settings;
         settings.antialiasingLevel = 8;
@@ -106,9 +106,9 @@ namespace game
         }
 
         if (input.actionDown(Input::Action::P1Move))
-            player1->moveArms(sf::Vector2f(0.f, -30.f));
+            player1->moveArms(sf::Vector2f(0.f, -15.f));
         if (input.actionDown(Input::Action::P2Move))
-            player2->moveArms(sf::Vector2f(0.f, -30.f));
+            player2->moveArms(sf::Vector2f(0.f, -15.f));
         if (input.actionPressed(Input::Action::P1Left))
             player1->shootLeftArm();
         if (input.actionPressed(Input::Action::P1Right))
