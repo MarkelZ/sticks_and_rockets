@@ -68,8 +68,59 @@ namespace game
             moveTimer -= tdelta;
     }
 
+    void DrawCannon(sf::RenderWindow &window, physics::RigidLink &link, float width, float percentCooldown)
+    {
+        auto p1 = link.v1.position;
+        auto p2 = link.v2.position;
+        auto diff = p1 - p2;
+        auto perp = vecm::normalized(sf::Vector2f(-diff.y, diff.x));
+        auto hwidth = width / 2.f;
+
+        auto r1 = p1 + perp * hwidth;
+        auto r2 = p1 - perp * hwidth;
+        auto r3 = p2 + perp * hwidth;
+        auto r4 = p2 - perp * hwidth;
+
+        sf::ConvexShape rectangle;
+        rectangle.setPointCount(4);
+
+        if (percentCooldown == 0.f)
+        {
+            // Draw empty cannon
+            rectangle.setPoint(0, r1);
+            rectangle.setPoint(1, r2);
+            rectangle.setPoint(2, r4);
+            rectangle.setPoint(3, r3);
+            rectangle.setFillColor(sf::Color::White);
+            window.draw(rectangle);
+        }
+        else
+        {
+            // Draw cannon with cooldown
+            auto m = p2 + diff * percentCooldown;
+            auto m1 = m + perp * hwidth;
+            auto m2 = m - perp * hwidth;
+
+            rectangle.setPoint(0, r1);
+            rectangle.setPoint(1, r2);
+            rectangle.setPoint(2, m2);
+            rectangle.setPoint(3, m1);
+            rectangle.setFillColor(sf::Color(64, 64, 64, 255));
+            window.draw(rectangle);
+
+            rectangle.setPoint(0, m1);
+            rectangle.setPoint(1, m2);
+            rectangle.setPoint(2, r4);
+            rectangle.setPoint(3, r3);
+            rectangle.setFillColor(sf::Color::Red);
+            window.draw(rectangle);
+        }
+    }
+
     void Player::draw(sf::RenderWindow &window) const
     {
+
+        // Draw sticks
         for (auto l : shape->links)
         {
             if (l->isBroken)
@@ -79,6 +130,12 @@ namespace game
                                  sf::Vertex(l->v2.position)};
             window.draw(line, 2, sf::Lines);
         }
+
+        // Draw hands
+        auto leftCD = leftTimer > 0.f ? leftTimer / shootCD : 0.f;
+        auto rightCD = rightTimer > 0.f ? rightTimer / shootCD : 0.f;
+        DrawCannon(window, *leftArm[2], 16.f, leftCD);
+        DrawCannon(window, *rightArm[2], 16.f, rightCD);
     }
 
     void Player::moveArms(sf::Vector2f move)
@@ -124,7 +181,7 @@ namespace game
 
         // Add some offset to position
         // so that it does not collide with the hand
-        auto position = hand.v2.position + 25.f * direction;
+        auto position = hand.v2.position + (Bomb::RADIUS + 1.f) * direction;
 
         auto bomb = new Bomb(game, position, velocity);
         game->addEntity(bomb);

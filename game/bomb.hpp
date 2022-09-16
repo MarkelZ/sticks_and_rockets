@@ -17,10 +17,11 @@ namespace game
 
         void explode();
 
+        static constexpr float RADIUS = 24.f;
+
     protected:
         bool isExploded;
         float power;
         sf::CircleShape circle;
-        static constexpr float RADIUS = 24.f;
     };
 }
