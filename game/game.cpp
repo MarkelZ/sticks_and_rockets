@@ -136,15 +136,14 @@ namespace game
         // Debug text
         float drawTime = elapsedTime() - updateTime;
         debugwriter.clear();
-        debugwriter.stream << "WASD to move. ";
-        debugwriter.stream << "Space to spawn ragdoll. ";
-        debugwriter.stream << "Left click to shoot.\n";
+        debugwriter.stream << "P1: 'A' move arms, 'S' shoot left, 'D' shoot right. \n";
+        debugwriter.stream << "P2: 'J' move arms, 'K' shoot left, 'L' shoot right. \n";
 
-        debugwriter.stream << "RigidLinks:   " << simulation.links.size() << "; ";
-        debugwriter.stream << "Vertices:   " << simulation.vertices.size() << "\n";
-        debugwriter.stream << "Entities:   " << entities.size() << "; ";
-        debugwriter.stream << "Dynamic obj.:   " << simulation.dynobjects.size() << "; ";
-        debugwriter.stream << "Triggers:   " << simulation.triggers.size() << "\n";
+        // debugwriter.stream << "RigidLinks:   " << simulation.links.size() << "; ";
+        // debugwriter.stream << "Vertices:   " << simulation.vertices.size() << "\n";
+        // debugwriter.stream << "Entities:   " << entities.size() << "; ";
+        // debugwriter.stream << "Dynamic obj.:   " << simulation.dynobjects.size() << "; ";
+        // debugwriter.stream << "Triggers:   " << simulation.triggers.size() << "\n";
 
         debugwriter.stream << "Update: " << std::fixed << std::setprecision(1) << updateTime << " ms; ";
         debugwriter.stream << "Draw:   " << std::fixed << std::setprecision(1) << drawTime << " ms\n";
