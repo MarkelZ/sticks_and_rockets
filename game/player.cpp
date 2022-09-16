@@ -28,22 +28,25 @@ namespace game
 
         // Strengths of body parts
         for (auto l : rope)
-            l->maxLength *= 1.25f;
+            l->maxLength *= 1.5f;
 
         for (auto l : head)
             l->maxLength *= 1.25f;
 
         for (auto l : body)
-            l->maxLength *= 1.25f;
+            l->maxLength *= 0.75f;
 
         for (auto l : leftArm)
-            l->maxLength *= 2.f;
+            l->maxLength *= 1.15f;
 
         for (auto l : rightArm)
-            l->maxLength *= 2.f;
+            l->maxLength *= 1.15f;
 
         for (auto l : legs)
-            l->maxLength *= 0.85f;
+            l->maxLength *= 0.75f;
+
+        leftArm[2]->maxLength *= 3.f;
+        rightArm[2]->maxLength *= 3.f;
     }
 
     void Player::onLinkBroken(std::shared_ptr<physics::RigidLink> link)
@@ -138,16 +141,16 @@ namespace game
         DrawCannon(window, *rightArm[2], 24.f, rightCD);
     }
 
-    void Player::moveArms(sf::Vector2f move)
+    void Player::moveArms()
     {
         if (moveTimer <= 0.f)
         {
             moveTimer = moveCD;
 
-            leftArm[2]->v1.push(move);
-            leftArm[2]->v2.push(move);
-            rightArm[2]->v1.push(move);
-            rightArm[2]->v2.push(move);
+            // leftArm[2]->v1.push(move);
+            leftArm[2]->v2.push(sf::Vector2f(-1.f, -20.f));
+            // rightArm[2]->v1.push(move);
+            rightArm[2]->v2.push(sf::Vector2f(1.f, -20.f));
         }
     }
 

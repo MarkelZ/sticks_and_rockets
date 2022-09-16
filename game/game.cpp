@@ -106,9 +106,9 @@ namespace game
         }
 
         if (input.actionDown(Input::Action::P1Move))
-            player1->moveArms(sf::Vector2f(0.f, -15.f));
+            player1->moveArms();
         if (input.actionDown(Input::Action::P2Move))
-            player2->moveArms(sf::Vector2f(0.f, -15.f));
+            player2->moveArms();
         if (input.actionPressed(Input::Action::P1Left))
             player1->shootLeftArm();
         if (input.actionPressed(Input::Action::P1Right))

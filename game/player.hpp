@@ -27,7 +27,7 @@ namespace game
 
         void update(float tdelta) override;
         void draw(sf::RenderWindow &window) const override;
-        void moveArms(sf::Vector2f move);
+        void moveArms();
         void shootLeftArm();
         void shootRightArm();
 
