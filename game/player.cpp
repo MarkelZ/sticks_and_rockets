@@ -134,8 +134,8 @@ namespace game
         // Draw hands
         auto leftCD = leftTimer > 0.f ? leftTimer / shootCD : 0.f;
         auto rightCD = rightTimer > 0.f ? rightTimer / shootCD : 0.f;
-        DrawCannon(window, *leftArm[2], 16.f, leftCD);
-        DrawCannon(window, *rightArm[2], 16.f, rightCD);
+        DrawCannon(window, *leftArm[2], 24.f, leftCD);
+        DrawCannon(window, *rightArm[2], 24.f, rightCD);
     }
 
     void Player::moveArms(sf::Vector2f move)
