@@ -174,13 +174,8 @@ namespace physics
 
             for (auto l : links)
             {
-                // // TEMP
-                // auto v1 = std::make_shared<Vertex>(l->v1.position);
-                // auto v2 = std::make_shared<Vertex>(l->v2.position);
-                // if (t->area->IsTouching(v1) || t->area->IsTouching(v2))
-                // {
-                //     t->onCollision(l);
-                // }
+                if (!l->isCollidable)
+                    continue;
 
                 if (t->area->isTouching(l))
                 {

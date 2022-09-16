@@ -16,6 +16,7 @@ namespace physics
         float maxLength;
         bool canBreak;
         bool isBroken;
+        bool isCollidable;
 
         std::function<void(std::shared_ptr<RigidLink>)> onLinkBroken;
 

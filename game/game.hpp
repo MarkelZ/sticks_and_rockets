@@ -46,6 +46,8 @@ namespace game
         Debugwriter debugwriter;
         Input input;
 
+        bool childMode;
+
         Game(int width, int height);
         void run();
 

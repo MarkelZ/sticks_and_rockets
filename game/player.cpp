@@ -1,11 +1,12 @@
 #include "player.hpp"
 #include "particleeffect.hpp"
 #include "game.hpp"
+#include "child.hpp"
 
 namespace game
 {
     Player::Player(Game *game, sf::Vector2f position)
-        : Entity(game), shape(std::make_shared<physics::Shape>("models/ragdoll.toml", 2.f)),
+        : Entity(game), shape(std::make_shared<physics::Shape>("models/player.toml", 2.f)),
           moveCD(0.25f), shootCD(1.f)
     {
         shape->moveTo(position);
@@ -13,6 +14,7 @@ namespace game
         for (auto l : shape->links)
         {
             l->onLinkBroken = std::bind(&Player::onLinkBroken, this, std::placeholders::_1);
+            l->isCollidable = true;
         }
 
         // Initialize bodyparts
@@ -159,7 +161,10 @@ namespace game
         if (leftTimer <= 0.f)
         {
             leftTimer = shootCD;
-            ShootBomb(*leftArm[2]);
+            if (game->childMode)
+                ShootChild(*leftArm[2]);
+            else
+                ShootBomb(*leftArm[2]);
         }
     }
 
@@ -168,7 +173,10 @@ namespace game
         if (rightTimer <= 0.f)
         {
             rightTimer = shootCD;
-            ShootBomb(*rightArm[2]);
+            if (game->childMode)
+                ShootChild(*rightArm[2]);
+            else
+                ShootBomb(*rightArm[2]);
         }
     }
 
@@ -189,5 +197,22 @@ namespace game
         auto bomb = new Bomb(game, position, velocity);
         game->addEntity(bomb);
         game->simulation.addTrigger(bomb->trigger);
+    }
+
+    void Player::ShootChild(physics::RigidLink &hand)
+    {
+        if (hand.isBroken)
+            return;
+
+        auto direction = vecm::normalized(hand.v2.position - hand.v1.position);
+        auto power = 20.f;
+        auto velocity = direction * power;
+
+        auto position = hand.v2.position + (Bomb::RADIUS + 1.f) * direction;
+
+        auto child = new Child(game, position, velocity);
+        game->addEntity(child);
+        game->simulation.addTrigger(child->trigger);
+        game->simulation.addShape(*child->shape);
     }
 }

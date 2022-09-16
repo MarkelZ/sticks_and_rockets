@@ -41,5 +41,6 @@ namespace game
         float moveTimer;  // Timer for move cooldown
 
         void ShootBomb(physics::RigidLink &hand);
+        void ShootChild(physics::RigidLink &hand);
     };
 }

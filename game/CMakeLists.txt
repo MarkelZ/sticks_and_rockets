@@ -1,6 +1,7 @@
 add_executable(game
     main.cpp
     bomb.cpp
+    child.cpp
     entity.cpp
     game.cpp
     particleeffect.cpp
