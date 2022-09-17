@@ -20,5 +20,6 @@ namespace physics
         void moveTo(sf::Vector2f position);
         void moveBy(sf::Vector2f direction);
         void scaleBy(float scale);
+        sf::Vector2f getPosition();
     };
 }

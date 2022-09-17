@@ -88,4 +88,11 @@ namespace physics
             links[i]->length *= scale;
         }
     }
+
+    sf::Vector2f Shape::getPosition()
+    {
+        if (vertices.empty())
+            return sf::Vector2f();
+        return vertices[0]->position;
+    }
 }

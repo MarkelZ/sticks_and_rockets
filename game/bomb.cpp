@@ -5,6 +5,11 @@
 
 namespace game
 {
+    sf::Vector2f ragdollCenter(physics::Shape &shape)
+    {
+        return (shape.vertices[6]->position + shape.vertices[7]->position) / 2.f;
+    }
+
     Bomb::Bomb(Game *game, sf::Vector2f position, sf::Vector2f velocity)
         : Entity(game), isExploded(false), power(2500.f), despawnTimer(3.f), enableTimer(0.04f)
     {
@@ -15,7 +20,8 @@ namespace game
         trigger->enabled = false;
 
         shape = std::make_shared<physics::Shape>("models/ragdoll.toml");
-        shape->moveTo(position);
+        auto center = ragdollCenter(*shape);
+        shape->moveBy(position - center);
         shape->push(velocity);
         // give some spin
         shape->vertices[0]->push(0.5f * velocity);    // head
@@ -61,9 +67,7 @@ namespace game
         else
         {
             // Move trigger to center of ragdoll
-            auto center = (shape->vertices[4]->position + shape->vertices[5]->position +
-                           shape->vertices[6]->position + shape->vertices[7]->position) /
-                          4.f;
+            auto center = ragdollCenter(*shape);
             trigger->position = center;
             trigger->area->moveTo(center);
             if (center.y + RADIUS >= game->getHeight())
