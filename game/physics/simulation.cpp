@@ -65,6 +65,19 @@ namespace physics
         removeAndClear(triggers, remTriggers);
     }
 
+    void Simulation::clear()
+    {
+        dynobjects.clear();
+        vertices.clear();
+        links.clear();
+        triggers.clear();
+
+        remDynObjs.clear();
+        remVertices.clear();
+        remLinks.clear();
+        remTriggers.clear();
+    }
+
     void Simulation::update(float tdelta)
     {
         updateDynamicObjects(tdelta);

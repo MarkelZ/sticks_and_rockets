@@ -6,7 +6,7 @@ namespace game
 {
     Player::Player(Game *game, sf::Vector2f position)
         : Entity(game), shape(std::make_shared<physics::Shape>("models/player.toml", 2.f)),
-          moveCD(0.25f), shootCD(1.f)
+          moveCD(0.25f), shootCD(1.f), leftTimer(0.f), rightTimer(0.f), moveTimer(0.f)
     {
         shape->moveTo(position);
 

@@ -24,11 +24,14 @@ namespace physics
             : width(width), height(height), gravity(gravity) {}
 
         void update(float tdelta);
+        void clear();
+
         void addShape(Shape &shape);
         void addVertex(std::shared_ptr<Vertex> vertex);
         void addLink(std::shared_ptr<RigidLink> link);
         void addDynamicObject(std::shared_ptr<DynamicObject> dynobj);
         void addTrigger(std::shared_ptr<Trigger> trigger);
+
         void popVertex(std::shared_ptr<Vertex> vertex);
         void popLink(std::shared_ptr<RigidLink> link);
         void popDynmaicObject(std::shared_ptr<DynamicObject> dynobj);

@@ -4,6 +4,17 @@
 
 namespace game
 {
+    void Game::initialize()
+    {
+        player1 = new Player(this, sf::Vector2f(200.f, 100.f));
+        addEntity(player1);
+        simulation.addShape(*player1->shape);
+
+        player2 = new Player(this, sf::Vector2f(width - 200.f, 100.f));
+        addEntity(player2);
+        simulation.addShape(*player2->shape);
+    }
+
     Game::Game(int width, int height)
         : width(width), height(height),
           debugwriter("content/freemono.ttf", 24, sf::Color::White),
@@ -19,13 +30,7 @@ namespace game
 
         input.setWindow(window);
 
-        player1 = new Player(this, sf::Vector2f(200.f, 100.f));
-        addEntity(player1);
-        simulation.addShape(*player1->shape);
-
-        player2 = new Player(this, sf::Vector2f(width - 200.f, 100.f));
-        addEntity(player2);
-        simulation.addShape(*player2->shape);
+        initialize();
     }
 
     void Game::run()
@@ -99,6 +104,19 @@ namespace game
         }
 
         simulation.update(SPT);
+
+        if (input.actionPressed(Input::Action::Restart))
+        {
+            simulation.clear();
+
+            for (auto e : entities)
+            {
+                delete e;
+            }
+            entities.clear();
+
+            initialize();
+        }
 
         for (auto e : entities)
         {

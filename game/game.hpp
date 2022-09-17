@@ -26,6 +26,7 @@ namespace game
 
         sf::RenderWindow *window;
 
+        void initialize();
         void update();
         void draw();
 
