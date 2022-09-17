@@ -6,12 +6,13 @@
 namespace game
 {
     Bomb::Bomb(Game *game, sf::Vector2f position, sf::Vector2f velocity)
-        : Entity(game), isExploded(false), power(2500.f), timer(3.f)
+        : Entity(game), isExploded(false), power(2500.f), despawnTimer(3.f), enableTimer(0.04f)
     {
         trigger = std::make_shared<physics::Trigger>(position);
         trigger->onCollision = std::bind(&Bomb::explode, this);
         trigger->area = new physics::CircleArea(position, RADIUS);
         trigger->isFixed = true;
+        trigger->enabled = false;
 
         shape = std::make_shared<physics::Shape>("models/ragdoll.toml");
         shape->moveTo(position);
@@ -33,10 +34,17 @@ namespace game
 
     void Bomb::update(float tdelta)
     {
+        if (enableTimer >= 0.f)
+        {
+            enableTimer -= tdelta;
+            if (enableTimer <= 0.f)
+                trigger->enabled = true;
+        }
+
         if (isExploded)
         {
-            timer -= tdelta;
-            if (timer <= 0.f)
+            despawnTimer -= tdelta;
+            if (despawnTimer <= 0.f)
             {
                 // Despawn
                 game->popEntity(this);

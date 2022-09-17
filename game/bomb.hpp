@@ -24,7 +24,8 @@ namespace game
     protected:
         bool isExploded;
         float power;
-        float timer;
+        float despawnTimer;
+        float enableTimer;
 
         void onLinkBroken(std::shared_ptr<physics::RigidLink> link);
     };
