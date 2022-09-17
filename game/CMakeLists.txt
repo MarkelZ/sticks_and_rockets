@@ -1,7 +1,6 @@
 add_executable(game
     main.cpp
     bomb.cpp
-    child.cpp
     entity.cpp
     game.cpp
     particleeffect.cpp
@@ -14,6 +13,7 @@ add_executable(game
     physics/triggerarea.cpp
     physics/vectormath.cpp
     physics/vertex.cpp
+    utils/algo.cpp
     utils/debugwriter.cpp
     utils/input.cpp)
 target_link_libraries(game sfml-graphics sfml-audio)

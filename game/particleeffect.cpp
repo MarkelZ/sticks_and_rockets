@@ -3,18 +3,10 @@
 #include "game.hpp"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "utils/algo.hpp"
 
 namespace game
 {
-    // Multiply the rgba channels of a color col by a scalar x
-    sf::Color colmul(float x, sf::Color col, bool mulalpha = true)
-    {
-        if (mulalpha)
-            return sf::Color(x * col.r, x * col.g, x * col.b, x * col.a);
-        else
-            return sf::Color(x * col.r, x * col.g, x * col.b, col.a);
-    }
-
     void ParticleEffect::update(float tdelta)
     {
         // Set circle's origin to dynmaic object's position
@@ -56,19 +48,6 @@ namespace game
     void ParticleEffect::push(sf::Vector2f velocity)
     {
         dynObject->push(velocity);
-    }
-
-    // Return a random float between a and b
-    float rfloat(float a = 0.f, float b = 1.f)
-    {
-        return a + (b - a) * (rand() / (static_cast<float>(RAND_MAX)));
-    }
-
-    sf::Vector2f addBias(sf::Vector2f direction, float dtheta)
-    {
-        auto theta = std::atan2(direction.y, direction.x);
-        theta += rfloat(-dtheta, dtheta);
-        return sf::Vector2f(std::cos(theta), std::sin(theta));
     }
 
     SparkParticle::SparkParticle(Game *game, sf::Vector2f position, sf::Vector2f direction)

@@ -1,37 +1,76 @@
 #include <iostream>
 #include "bomb.hpp"
 #include "game.hpp"
+#include "utils/algo.hpp"
 
 namespace game
 {
     Bomb::Bomb(Game *game, sf::Vector2f position, sf::Vector2f velocity)
-        : Entity(game), circle(RADIUS, 16), isExploded(false), power(2000.f)
+        : Entity(game), isExploded(false), power(2000.f)
     {
-        trigger = std::make_shared<physics::Trigger>(position, velocity);
+        trigger = std::make_shared<physics::Trigger>(position);
         trigger->onCollision = std::bind(&Bomb::explode, this);
         trigger->area = new physics::CircleArea(position, RADIUS);
+        trigger->isFixed = true;
 
-        circle.setFillColor(sf::Color(255, 128, 255, 255));
-        circle.setPosition(position);
+        shape = std::make_shared<physics::Shape>("models/ragdoll.toml");
+        shape->moveTo(position);
+        shape->push(velocity);
+        shape->vertices[0]->push(0.25f * velocity); // give some spin
+
+        for (auto l : shape->links)
+        {
+            l->onLinkBroken = std::bind(&Bomb::onLinkBroken, this, std::placeholders::_1);
+            l->isCollidable = false;
+            l->canBreak = rfloat() < 0.25f; // randomly choose whether a link can break
+        }
     }
 
     void Bomb::update(float tdelta)
     {
-        auto radius = circle.getRadius();
-        circle.setPosition(trigger->position.x - radius, trigger->position.y - radius);
-
-        if (trigger->position.y + radius >= game->getHeight())
+        if (isExploded)
         {
-            explode();
+            timer -= tdelta;
+            if (timer <= 0.f)
+            {
+                // Despawn
+                game->popEntity(this);
+                for (auto l : shape->links)
+                {
+                    game->simulation.popLink(l);
+                }
+                for (auto v : shape->vertices)
+                {
+                    game->simulation.popVertex(v);
+                }
+            }
+        }
+        else
+        {
+            // Move trigger to center of ragdoll
+            auto center = (shape->vertices[4]->position + shape->vertices[5]->position +
+                           shape->vertices[6]->position + shape->vertices[7]->position) /
+                          4.f;
+            trigger->position = center;
+            trigger->area->moveTo(center);
+            if (center.y + RADIUS >= game->getHeight())
+            {
+                explode();
+            }
         }
     }
 
     void Bomb::draw(sf::RenderWindow &window) const
     {
-        if (isExploded)
-            return;
+        for (auto l : shape->links)
+        {
+            if (l->isBroken)
+                continue;
 
-        window.draw(circle);
+            sf::Vertex line[] = {sf::Vertex(l->v1.position, sf::Color::Green),
+                                 sf::Vertex(l->v2.position, sf::Color::Green)};
+            window.draw(line, 2, sf::Lines);
+        }
     }
 
     void Bomb::explode()
@@ -63,8 +102,18 @@ namespace game
             v->push(push);
         }
 
-        // Delete bomb entity
-        game->popEntity(this);
+        // Delete trigger
         game->simulation.popTrigger(trigger);
+    }
+
+    void Bomb::onLinkBroken(std::shared_ptr<physics::RigidLink> link)
+    {
+        // Spawn link broken partiles
+        for (int _ = 0; _ < 16; _++)
+        {
+            auto p = new BreakParticle(game, link->v1.position, link->v2.position);
+            game->addEntity(p);
+            game->addDynamicObject(p->dynObject);
+        }
     }
 }

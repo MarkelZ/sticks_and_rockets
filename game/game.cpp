@@ -7,8 +7,7 @@ namespace game
     Game::Game(int width, int height)
         : width(width), height(height),
           debugwriter("content/freemono.ttf", 24, sf::Color::White),
-          input(), simulation(width, height, 0.35f),
-          childMode(true)
+          input(), simulation(width, height, 0.35f)
     {
         sf::ContextSettings settings;
         settings.antialiasingLevel = 8;

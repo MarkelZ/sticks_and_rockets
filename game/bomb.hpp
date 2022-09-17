@@ -2,6 +2,7 @@
 #include <memory>
 #include "entity.hpp"
 #include "physics/trigger.hpp"
+#include "physics/shape.hpp"
 
 namespace game
 {
@@ -9,6 +10,7 @@ namespace game
     {
     public:
         std::shared_ptr<physics::Trigger> trigger;
+        std::shared_ptr<physics::Shape> shape;
 
         Bomb(Game *game, sf::Vector2f position, sf::Vector2f velocity);
 
@@ -22,6 +24,8 @@ namespace game
     protected:
         bool isExploded;
         float power;
-        sf::CircleShape circle;
+        float timer;
+
+        void onLinkBroken(std::shared_ptr<physics::RigidLink> link);
     };
 }
