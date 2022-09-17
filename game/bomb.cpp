@@ -6,7 +6,7 @@
 namespace game
 {
     Bomb::Bomb(Game *game, sf::Vector2f position, sf::Vector2f velocity)
-        : Entity(game), isExploded(false), power(2000.f)
+        : Entity(game), isExploded(false), power(2000.f), timer(3.f)
     {
         trigger = std::make_shared<physics::Trigger>(position);
         trigger->onCollision = std::bind(&Bomb::explode, this);
@@ -22,7 +22,7 @@ namespace game
         {
             l->onLinkBroken = std::bind(&Bomb::onLinkBroken, this, std::placeholders::_1);
             l->isCollidable = false;
-            l->canBreak = rfloat() < 0.25f; // randomly choose whether a link can break
+            l->canBreak = rfloat() < 0.35f; // randomly choose whether a link can break
         }
     }
 
