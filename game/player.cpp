@@ -185,7 +185,7 @@ namespace game
 
         // Add some offset to position
         // so that it does not collide with the hand
-        auto position = hand.v2.position + (Bomb::RADIUS + 1.f) * direction;
+        auto position = hand.v2.position + (Bomb::RADIUS + 5.f) * direction;
 
         auto bomb = new Bomb(game, position, velocity);
         game->addEntity(bomb);

@@ -6,7 +6,7 @@
 namespace game
 {
     Bomb::Bomb(Game *game, sf::Vector2f position, sf::Vector2f velocity)
-        : Entity(game), isExploded(false), power(2000.f), timer(3.f)
+        : Entity(game), isExploded(false), power(2500.f), timer(3.f)
     {
         trigger = std::make_shared<physics::Trigger>(position);
         trigger->onCollision = std::bind(&Bomb::explode, this);
@@ -16,7 +16,12 @@ namespace game
         shape = std::make_shared<physics::Shape>("models/ragdoll.toml");
         shape->moveTo(position);
         shape->push(velocity);
-        shape->vertices[0]->push(0.25f * velocity); // give some spin
+        // give some spin
+        shape->vertices[0]->push(0.5f * velocity);    // head
+        shape->vertices[12]->push(-0.25f * velocity); // lhand
+        shape->vertices[15]->push(-0.25f * velocity); // rhand
+        shape->vertices[18]->push(-0.25f * velocity); // lleg
+        shape->vertices[21]->push(-0.25f * velocity); // rleg
 
         for (auto l : shape->links)
         {

@@ -19,7 +19,7 @@ namespace game
 
         void explode();
 
-        static constexpr float RADIUS = 24.f;
+        static constexpr float RADIUS = 32.f;
 
     protected:
         bool isExploded;
