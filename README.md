@@ -2,7 +2,9 @@
 
 ## Description
 
-Really fun game.
+A really fun two player game.
+
+![thumbnail](thumbnail.png)
 
 ## Dependencies
 
