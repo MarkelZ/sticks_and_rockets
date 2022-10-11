@@ -91,7 +91,7 @@ namespace game
     }
 
     ExplosionParticle::ExplosionParticle(Game *game, sf::Vector2f position)
-        : ParticleEffect(game, NULL, sf::Color(196, 128, 0, 255), sf::Color(255, 255, 255, 255), 1.f, 64.f)
+        : ParticleEffect(game, NULL, sf::Color(196, 128, 0, 255), sf::Color(255, 255, 255, 255), 1.f, 128.f)
     {
         maxAge = 0.125f;
         dynObject = std::make_shared<physics::DynamicObject>(
