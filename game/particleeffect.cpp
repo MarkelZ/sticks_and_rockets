@@ -69,7 +69,7 @@ namespace game
     }
 
     BreakParticle::BreakParticle(Game *game, sf::Vector2f p1, sf::Vector2f p2)
-        : ParticleEffect(game, NULL, sf::Color(255, 64, 64, 255), sf::Color(0, 0, 0, 255), 1.f, rfloat(2.f, 4.f))
+        : ParticleEffect(game, NULL, sf::Color(255, 64, 64, 255), sf::Color(0, 0, 0, 255), rfloat(0.5f, 1.5f), rfloat(2.f, 4.f))
     {
         // pick random point between p1 and p2
         float alpha = rfloat(0.f, 1.f);
@@ -120,7 +120,7 @@ namespace game
     }
 
     SmokeParticle::SmokeParticle(Game *game, sf::Vector2f position)
-        : ParticleEffect(game, NULL, sf::Color::White, sf::Color::Black, 1.f, rfloat(4.f, 16.f))
+        : ParticleEffect(game, NULL, sf::Color::White, sf::Color::Black, rfloat(1.2f, 2.f), rfloat(4.f, 16.f))
     {
         auto angle = rfloat(0.f, M_PI * 2.f);
         auto speed = rfloat(2.f, 8.f);
@@ -131,7 +131,6 @@ namespace game
 
         float saturation = rfloat(0.85f, 1.f);
         color1 = colmul(saturation, sf::Color(255, 255, 255, 255), false);
-        maxAge = 1.5f;
 
         circle.setPosition(position);
         circle.setFillColor(color1);
